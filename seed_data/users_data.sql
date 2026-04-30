@@ -25,8 +25,10 @@ SET full_name = 'YaSh dHAnKAr' WHERE id = 1;
 UPDATE users
 SET password = 'Pass';
 
+
+INSERT INTO users(role,first_name,dob,gender,phone_number,email,password,last_name) VALUES
+('S','yash','2003-12-15','M',9784294429,'yashdhank123@gmail.com','1234','dhankar');
+INSERT INTO users(role,first_name,dob,gender,phone_number,email,password,last_name) VALUES
+('S','ankit','2003-12-15','M',9784294410,'ankit123@gmail.com','1234','karodiya');
+
 SELECT * FROM users ORDER BY 1;
-
- 
-
-TRUNCATE users RESTART IDENTITY CASCADE;

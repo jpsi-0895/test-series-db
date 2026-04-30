@@ -36,7 +36,8 @@ $$;
 CREATE OR REPLACE FUNCTION user_full_name_format()
 RETURNS TRIGGER AS $$
 BEGIN
-	NEW.full_name := INITCAP(NEW.full_name);
+	NEW.first_name := INITCAP(NEW.first_name);
+	NEW.last_name := INITCAP(NEW.last_name);
 	RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -48,9 +49,32 @@ EXECUTE FUNCTION user_full_name_format();
 
 -------------------------------------------------------------------------------------------------
 
+CREATE OR REPLACE FUNCTION check_total_marks()
+RETURNS TRIGGER AS $$
+DECLARE
+	total INT;
+	test_total INT;
+BEGIN
+	SELECT COALESCE(SUM(q.marks),0)
+	INTO total
+	FROM test_questions tq
+	JOIN questions q ON tq.question_id = q.id
+	WHERE tq.test_id = NEW.test_id;
 
-SELECT * FROM users WHERE id = 2;
-UPDATE users
-SET dob = '2003-12-16' WHERE id = 2;
+	SELECT total_marks INTO test_total
+	FROM tests
+	WHERE id = NEW.test_id;
+
+	IF total > test_total THEN
+		RAISE EXCEPTION 'Total questions marks exceed test total marks';
+	END IF;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_check_total_marks
+AFTER INSERT OR UPDATE ON test_questions
+FOR EACH ROW
+EXECUTE FUNCTION check_total_marks();
 
 ----------------------------------------------------------------------------------------------------

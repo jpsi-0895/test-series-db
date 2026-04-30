@@ -1,7 +1,7 @@
 CREATE TABLE users(
 	id BIGSERIAL PRIMARY KEY,
 	role VARCHAR(20),
-	full_name VARCHAR(200),
+	first_name VARCHAR(200),
 	dob DATE,
 	gender VARCHAR(10),
 	phone_number BIGINT,
@@ -22,3 +22,11 @@ ADD COLUMN password VARCHAR(30);
 ALTER TABLE users
 ALTER COLUMN password SET NOT NULL;
 
+ALTER TABLE users
+ADD COLUMN image TEXT;
+
+ALTER TABLE users
+ADD COLUMN last_name VARCHAR(30);
+
+ALTER TABLE users
+ADD COLUMN timezone VARCHAR(20);

@@ -69,3 +69,7 @@ REFERENCES exams(id);
 ALTER TABLE questions
 ADD CONSTRAINT question_medium_id_fkey FOREIGN KEY (medium_id)
 REFERENCES exam_medium(id);
+
+ALTER TABLE test_results
+ADD CONSTRAINT test_results_testseries_id_fkey FOREIGN KEY (testseries_id)
+REFERENCES testseries(id);

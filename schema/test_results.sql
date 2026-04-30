@@ -8,6 +8,5 @@ CREATE TABLE test_results(
 	updated_at TIMESTAMP(0) DEFAULT NOW()
 );
 
-UPDATE test_results
-SET status = 'P';
-SELECT * FROM test_results;
+ALTER TABLE test_results
+ADD COLUMN testseries_id BIGINT;

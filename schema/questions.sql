@@ -22,4 +22,4 @@ ADD COLUMN medium_id INT;
 ALTER TABLE questions
 ADD COLUMN is_deleted BOOL DEFAULT FALSE;
 
-SELECT * FROM questions LIMIT 5;
+SELECT * FROM questions;

@@ -4,3 +4,5 @@ SELECT
 	question_id,
 	option_text
 FROM question_options;
+
+select * from question_option_test_vw;

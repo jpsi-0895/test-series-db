@@ -40,7 +40,7 @@ END;
 $$;
 SET app.user_id = 2;
 CALL auto_submit_test(1);
-
+select * from tests;
 
 SELECT 
 	tq.id,
@@ -85,6 +85,7 @@ BEGIN
 END;
 $$;
 CALL auto_select_answer(1);
+select * from student_answers;
 
 UPDATE student_answers sa
 SET is_correct = qo.is_correct
@@ -155,3 +156,5 @@ BEGIN
 END;
 $$;
 CALL test_result_update(1);
+
+SELECT * FROM test_results;

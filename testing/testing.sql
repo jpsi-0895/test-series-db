@@ -93,50 +93,52 @@ WHERE e.category_name = 'SSC CGL'
 AND q.id IN (1,2,9,14,12)
 ORDER BY id;
 
---------------------------------------------------------------------------------------------------------------
+EXPLAIN ANALYZE
+SELECT * FROM users
+WHERE email = 'user1@gmail.com';
 
-INSERT INTO questions (
-	question_description,
-	question_type,
-	unit_id,
-	difficulty_level,
-	status,
-	marks
-)
-SELECT 
-	'Question ' || gs,
-	'MCQ',
-	(1 + (gs % 10)),   -- 10 units
-	CASE 
-		WHEN gs % 3 = 0 THEN 'EASY'
-		WHEN gs % 3 = 1 THEN 'MEDIUM'
-		ELSE 'HARD'
-	END,
-	'ACTIVE',
-	2
-FROM generate_series(1, 1000000) gs;
-select * from questions;
+SELECT * FROM users
+WHERE email = 'user1@gmail.com' OR '1'='1';
 
+CREATE ROLE admin;
+CREATE ROLE app_user;
 
+GRANT SELECT, INSERT ON users TO admin;
+GRANT SELECT ON users TO app_user;
 
-INSERT INTO question_options (question_id, option_text, is_correct)
-SELECT 
-	q.id,
-	'Option ' || opt,
-	(opt = 1)
-FROM questions q
-CROSS JOIN generate_series(1,4) opt;
-select * from question_options;
-
-
-
-INSERT INTO users (role, full_name, phone_number)
-SELECT 
-	'S',
-	'User ' || gs,
-	'99999' || gs
-FROM generate_series(1, 10000) gs;
-SELECT * FROM users;
+INSERT INTO users(role,full_name,dob,gender,phone_number,email,password) VALUES
+('S','yash','2003-12-15','M',9784294429,'yashdhank123@gmail.com','1234');
 
 EXPLAIN ANALYZE
-SELECT id, question_description FROM questions;
+SELECT category_name FROM exams WHERE status = 'ACTIVE';
+
+EXPLAIN ANALYZE
+SELECT s.name, syllabus
+FROM subjects s
+JOIN exams e ON s.exam_id = e.id
+WHERE e.category_name = 'SSC CGL';
+
+EXPLAIN ANALYZE
+SELECT u.unit_name
+FROM units u
+JOIN subjects s ON u.subject_id = s.id
+JOIN exams e ON e.id = s.exam_id
+WHERE e.category_name = 'SSC CGL'
+AND s.name = 'English Comprehension';
+
+SELECT * FROM tests;
+INSERT INTO tests(user_id,total_marks,duration_in_minutes,exam_id) VALUES
+(1,200,180,1);
+
+SELECT * FROM test_questions;
+SELECT q.id FROM questions q
+JOIN exams e ON q.exam_id = e.id
+WHERE e.category_name = 'SSC CGL';
+
+INSERT INTO test_questions(test_id,question_id)
+SELECT 1, id FROM questions
+LIMIT 1;
+
+SELECT first_name || ' ' || last_name FROM users;
+
+--------------------------------------------------------------------------------------------------------------
