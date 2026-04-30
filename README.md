@@ -2,10 +2,28 @@
 
 ## Project Overview
 
-This repository contains a PostgreSQL database schema for an online exam platform (similar to SSC/UPSC-style test systems).  
-It models the full exam lifecycle:
+This repository contains a PostgreSQL database system for an online exam platform (SSC/UPSC-style test workflow).
+It models the full lifecycle:
 
-`User -> Exam Selection -> Test Creation -> Questions -> Answers -> Evaluation -> Result -> History`
+`User -> Exam/TestSeries Selection -> Test Creation -> Questions -> Answers -> Evaluation -> Result -> Analytics`
+
+## Latest Project Updates
+
+- Added new schema modules:
+  - `testseries` scheduling metadata (`start_date_time`, `ts_title`, `sub_title`, `duration_in_min`, `total_questions`, `status`)
+  - `notifications`
+  - `user_sessions`
+  - `certificates`
+- Added foreign key support for `test_results.testseries_id -> testseries.id`
+- Expanded constraints and indexes for better integrity and performance
+- Updated procedures, triggers, and views for exam automation and result consistency
+- Added analytics query packs:
+  - `Queries/dashboard_queries.sql`
+  - `Queries/result_queries.sql`
+  - `Queries/upcoming_test_queries.sql`
+- Added bulk seed scripts:
+  - `seed_data/questions_data.sql`
+  - `seed_data/question_options.sql`
 
 ## Features
 
@@ -13,23 +31,29 @@ It models the full exam lifecycle:
 
 - User management for students and teachers
 - Exam -> Subject -> Unit -> Question hierarchy
-- Random question generation per test
-- MCQ (multiple-choice) question support
-- Student answer submission
-- Automatic answer evaluation
-- Result calculation with marks and pass/fail status
+- Test session creation and question allocation
+- MCQ answer capture and correctness evaluation
+- Marks calculation with pass/fail outcome
 
-### Advanced Features
+### Platform Features
 
-- Automated test submission workflow
-- CTE-based result calculation
-- Data integrity through constraints
-- Duplicate prevention using `ON CONFLICT`
-- User question history tracking
+- TestSeries scheduling and upcoming/open test filtering
+- User session tracking (device, IP, login/logout, token)
+- Notification model for user alerts
+- Certificate tracking for completed outcomes
+- User question history tracking to reduce repeat questions
+
+### Automation Features
+
+- Auto test creation and submission flow (`auto_submit_test`)
+- Auto answer selection helper (`auto_select_answer`)
+- Result generation/update procedure (`test_result_update`)
+- Auto `updated_at` trigger on tables that support it
+- Name formatting and test total-marks validation triggers
 
 ## Database Schema
 
-Main tables:
+Primary tables:
 
 - `users`
 - `exams`
@@ -37,80 +61,53 @@ Main tables:
 - `units`
 - `questions`
 - `question_options`
+- `testseries`
 - `tests`
 - `test_questions`
 - `student_answers`
 - `test_results`
 - `user_question_history`
+- `notifications`
+- `user_sessions`
+- `certificates`
 
-## Workflow
+## Query Packs
 
-1. User selects an exam
-2. System creates a test
-3. Questions are assigned randomly
-4. User submits answers
-5. System evaluates answers
-6. Result is generated
+- `Queries/dashboard_queries.sql` - dashboard KPIs (completed tests, average score, certificates, recent results)
+- `Queries/result_queries.sql` - attempts, pass ratio, percentage views, pass/fail result breakdown
+- `Queries/upcoming_test_queries.sql` - all/open/scheduled/date-wise testseries lookups
+
+## Data Integrity and Performance
+
+- Foreign key constraints across exam/test/result hierarchy
+- Unique constraints to prevent duplicate options/units/answers
+- Check constraints for controlled enum-like values (role, status, difficulty, etc.)
+- Conflict-safe history inserts using `ON CONFLICT DO NOTHING`
+- Targeted indexes for joins and high-frequency filters
+
+## Repository Structure
+
+- `schema/` - table definitions
+- `constraints/` - foreign key, unique, check, and default constraints
+- `indexes/` - index definitions
+- `views/` - reusable reporting/query views
+- `functions/` - SQL functions
+- `procedures/` - workflow procedures
+- `triggers/` - trigger functions and trigger creation scripts
+- `security/` - row-level security and access-related scripts
+- `seed_data/` - sample/bulk data scripts
+- `Queries/` - dashboard, result, and operational query sets
+- `testing/` - validation/testing scripts
+- `migrations/` - migration scripts
+- `scripts/` - utility scripts
+- `docs/` - project documentation
+- `Full Database/` - complete bundled schema
 
 ## Tech Stack
 
 - **Database:** PostgreSQL
-- **Language:** SQL
-- **Concepts Used:**
-  - Joins
-  - CTE (`WITH` clause)
-  - Constraints
-  - Indexing
-  - Transaction-oriented logic
-
-## Data Integrity
-
-- Foreign key constraints for valid relationships
-- Unique constraints to prevent duplicates
-- Check constraints for controlled values (for example: role, difficulty)
-- Conflict handling via `ON CONFLICT DO NOTHING`
-
-## Optimization
-
-- Indexes on frequently queried columns
-  - `test_questions(test_id)`
-  - `student_answers(test_questions_id)`
-- Efficient `JOIN` patterns
-- Aggregation using CTEs
-
-## Repository Structure
-
-- `schema/` - Core table definitions
-- `constraints/` - Constraint definitions
-- `indexes/` - Index definitions
-- `views/` - View scripts
-- `functions/` - SQL functions
-- `procedures/` - Stored procedures
-- `triggers/` - Trigger scripts
-- `security/` - Access and role-related scripts
-- `seed_data/` - Initial/sample data
-- `migrations/` - Migration scripts
-- `testing/` - SQL test scripts
-- `Queries/` - Query examples and analysis scripts
-- `scripts/` - Utility scripts
-- `docs/` - Documentation
-- `Full Database/` - Full bundled SQL definitions
-
-## Learning Outcomes
-
-- Designing a normalized relational schema
-- Writing complex SQL queries (`CTE`, `JOIN`, `UPDATE`)
-- Implementing business logic at the database layer
-- Maintaining data consistency and integrity
-- Improving query performance with indexing and query design
-
-## Future Improvements
-
-- Timer-based auto-submission
-- Negative marking support
-- Leaderboard and ranking system
-- API integration (Spring Boot / Node.js)
-- Authentication and role-based access
+- **Language:** SQL / PLpgSQL
+- **Key Concepts:** Joins, CTEs, constraints, indexing, triggers, procedures
 
 ## Author
 
