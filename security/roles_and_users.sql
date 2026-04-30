@@ -1,0 +1,3 @@
+CREATE ROLE student;
+CREATE USER yash WITH PASSWORD 'yash123';
+ALTER ROLE student WITH PASSWORD 'student123';

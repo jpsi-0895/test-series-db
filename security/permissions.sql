@@ -1,0 +1,18 @@
+GRANT USAGE ON SCHEMA public TO student;
+GRANT SELECT,INSERT,UPDATE ON TABLE tests TO student;
+GRANT USAGE, SELECT ON SEQUENCE tests_id_seq TO student;
+GRANT SELECT, INSERT, UPDATE ON TABLE test_questions TO student;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO student;
+GRANT SELECT ON TABLE exams TO student;
+GRANT SELECT ON TABLE subjects TO student;
+GRANT SELECT ON TABLE units TO student;
+GRANT SELECT ON TABLE question_test_vw TO student;
+GRANT SELECT,INSERT ON TABLE user_question_history TO student;
+GRANT SELECT, INSERT ON TABLE student_answers TO student;
+GRANT SELECT ON TABLE question_option_test_vw TO student;
+GRANT SELECT, INSERT, UPDATE ON TABLE test_results TO student;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE users TO student;
+GRANT SELECT ON TABLE exam_medium TO student;
+GRANT student TO yash;
+GRANT student TO ankit;
+ALTER ROLE yash INHERIT;
