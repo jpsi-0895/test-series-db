@@ -1,0 +1,8 @@
+{
+  "exam_name": "JEE",
+  "subject_name": "Physics",
+  "unit_name": "Work Power And Energy",
+  "questions_parsed": 23,
+  "pdf_file": "question_pdfs\\WORK POWER AND ENERGY.pdf",
+  "sql_file": "seed_data\\work_power_energy_ex01_mapped.sql"
+}
